@@ -1,4 +1,4 @@
-import { app, globalShortcut } from 'electron';
+import { app, globalShortcut, Menu } from 'electron';
 // import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import * as path from 'path'
@@ -9,6 +9,16 @@ const menubar = createMenubar({
   index: `file://${path.join(__dirname, 'index.html')}`
 })
 menubar.on('ready', () => {
+  const secondaryMenu = Menu.buildFromTemplate([{
+    label: 'Quit',
+    click() {
+      menubar.app.quit()
+    },
+    accelerator: 'CommandOrControl+Q'
+  }])
+  menubar.tray.on('right-click', () => {
+    menubar.tray.popUpContextMenu(secondaryMenu)
+  })
   const createClippingShortcut = globalShortcut.register('CommandOrControl+!', () => {
     menubar.window && menubar.window.webContents.send('create-new-clipping')
   }) as unknown as boolean;
