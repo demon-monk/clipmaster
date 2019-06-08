@@ -1,6 +1,12 @@
 import * as React from "react";
 
 import { clipboard, ipcRenderer } from "electron";
+import database from './database'
+
+interface Clipping {
+  content: string
+  id: number
+}
 
 const writeToClipboard = (content: string) => {
   clipboard.writeText(content);
@@ -8,17 +14,12 @@ const writeToClipboard = (content: string) => {
 
 export class App extends React.Component<
   undefined,
-  { clippings: { content: string; id: number }[] }
+  { clippings: Clipping[] }
 > {
   constructor() {
     super();
     this.state = {
-      clippings: [
-        {
-          content: "Lol",
-          id: 123
-        }
-      ]
+      clippings: []
     };
 
     this.addClipping = this.addClipping.bind(this);
@@ -28,19 +29,19 @@ export class App extends React.Component<
   componentDidMount() {
     ipcRenderer.on("create-new-clipping", this.addClipping);
     ipcRenderer.on("write-to-clipboard", this.handleWriteToClipboard)
+    this.fetchClippings()
+  }
+
+  fetchClippings = () => {
+    database('clippings')
+      .select<Clipping[]>() // select * from clippings
+      .then((clippings) => this.setState({ clippings }))
   }
 
   addClipping() {
-    const { clippings } = this.state;
-
     const content = clipboard.readText();
-    const id = Date.now();
-
-    const clipping = { id, content };
-
-    this.setState({
-      clippings: [clipping, ...clippings]
-    });
+    // insert new record into table
+    database('clippings').insert({ content }).then(this.fetchClippings)
   }
 
   handleWriteToClipboard() {
@@ -59,8 +60,8 @@ export class App extends React.Component<
 
         <section className="content">
           <div className="clippings-list">
-            {this.state.clippings.map(clipping => (
-              <Clipping content={clipping.content} key={clipping.id} />
+            {this.state.clippings.map(({ content, id }) => (
+              <Clipping content={content} key={id} />
             ))}
           </div>
         </section>
