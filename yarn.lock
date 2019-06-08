@@ -2521,6 +2521,11 @@ electron-packager@^11.0.0:
     semver "^5.3.0"
     yargs-parser "^9.0.2"
 
+electron-positioner@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npm.taobao.org/electron-positioner/download/electron-positioner-4.1.0.tgz#e158f8f6aabd6725a8a9b4f2279b9504bcbea1b0"
+  integrity sha1-4Vj49qq9ZyWoqbTyJ5uVBLy+obA=
+
 electron-prebuilt-compile@4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/electron-prebuilt-compile/download/electron-prebuilt-compile-4.0.0.tgz#3262fe69fa343022353e4c8bd16c60e8f181c47e"
@@ -4576,6 +4581,13 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^2.0.0"
     p-is-promise "^2.0.0"
+
+menubar@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.npm.taobao.org/menubar/download/menubar-6.0.3.tgz#6d87e8199a7c801d9a9b197c945f9e159bd67550"
+  integrity sha1-bYfoGZp8gB2amxl8lF+eFZvWdVA=
+  dependencies:
+    electron-positioner "^4.1.0"
 
 meow@^3.1.0:
   version "3.7.0"
