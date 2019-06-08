@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import * as path from 'path'
@@ -35,6 +35,19 @@ const createWindow = async () => {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  const createClippingShortcut = globalShortcut.register('CommandOrControl+!', () => {
+    mainWindow && mainWindow.webContents.send('create-new-clipping')
+  }) as unknown as boolean;
+  if (!createClippingShortcut) {
+    console.error('Registration failed', 'createClippingShortcut')
+  }
+  const writeToClippingShortcut = globalShortcut.register('CommandOrControl+@', () => {
+    mainWindow && mainWindow.webContents.send('write-to-clipboard')
+  }) as unknown as boolean;
+  if (!writeToClippingShortcut) {
+    console.error('Registration failed', 'writeToClippingShortcut')
+  }
 };
 
 // This method will be called when Electron has finished

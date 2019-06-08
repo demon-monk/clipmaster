@@ -27,6 +27,7 @@ export class App extends React.Component<
 
   componentDidMount() {
     ipcRenderer.on("create-new-clipping", this.addClipping);
+    ipcRenderer.on("write-to-clipboard", this.handleWriteToClipboard)
   }
 
   addClipping() {
