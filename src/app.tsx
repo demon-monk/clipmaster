@@ -49,6 +49,10 @@ export class App extends React.Component<
     if (clipping) writeToClipboard(clipping.content);
   }
 
+  onRemove = (id: number) => {
+    database('clippings').where('id', id).delete().then(this.fetchClippings)
+  }
+
   render() {
     return (
       <div className="container">
@@ -61,7 +65,7 @@ export class App extends React.Component<
         <section className="content">
           <div className="clippings-list">
             {this.state.clippings.map(({ content, id }) => (
-              <Clipping content={content} key={id} />
+              <Clipping content={content} id={id} key={id} onRemove={this.onRemove} />
             ))}
           </div>
         </section>
@@ -70,7 +74,7 @@ export class App extends React.Component<
   }
 }
 
-const Clipping = (props: {content: string}) => {
+const Clipping = (props: {content: string, id: number, onRemove: (id: number) => void}) => {
   return (
     <article className="clippings-list-item">
       <div className="clipping-text" disabled>
@@ -81,6 +85,7 @@ const Clipping = (props: {content: string}) => {
           &rarr; Clipboard
         </button>
         <button>Update</button>
+        <button className="remove-clipping" onClick={() => props.onRemove(props.id)}>Remove</button>
       </div>
     </article>
   );
